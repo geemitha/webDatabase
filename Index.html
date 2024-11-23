@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Read & Publish Agreemnt</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <img src="Img\Victoria_University_Melb_Aus_Logo_Portrait_K.png" alt="Logo" class="logo">
+        <h1>Read & Publish Agreemnts</h1>
+    </header>
+    <main>
+
+        <!-- Search Section -->
+    <div class="search-section">
+        <button class="action-button plus-button">+</button>
+        <button class="action-button minus-button">-</button>
+        <select class="dropdown">
+            <option value="">Pick an option</option>
+        </select>
+        <input type="text" placeholder="Please Enter a Keyword..." class="search-input">
+        <button class="search-button">Search</button>
+    </div>
+
+        <!-- Add & Save Form -->
+        <div class="form-container">
+            <form class="add-save-form">
+                <input type="text" name="title" placeholder="Title" required>
+                <input type="text" name="issn" placeholder="ISSN" required>
+                <input type="text" name="publisher" placeholder="Publisher" required>
+                <input type="text" name="ranking" placeholder="Scimago Ranking" required>
+                <input type="text" name="category1" placeholder="Category 1" required>
+                <input type="text" name="category2" placeholder="Category 2" required>
+                <input type="text" name="category3" placeholder="Category 3" required>
+                <input type="text" name="jurnalHome" placeholder="Jurnal Homepage" required>
+                <button type="submit" class="save-button">Save & Create</button>
+            </form>
+        </div>
+
+        <!-- Table -->
+        <div class="table-container">
+            <table class="add-save-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Title</th>
+                        <th>ISSN</th>
+                        <th>Publisher</th>
+                        <th>Scimago Ranking</th>
+                        <th>Category 1</th>
+                        <th>Category 2</th>
+                        <th>Category 3</th>
+                        <th>Jurnal Homepage</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Placeholder row -->
+                    <tr>
+                        <td>1</td>
+                        <td>Example Title</td>
+                        <td>1234-5678</td>
+                        <td>Example Publisher</td>
+                        <td>Q1</td>
+                        <td>Example1</td>
+                        <td>Example2</td>
+                        <td>Example3</td>
+                        <td>www.example.com</td>
+                        <td>
+                            <button class="edit-button">Edit</button>
+                            <button class="save-button">Save</button>
+                            <button class="delete-button">Delete</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+</body>
+</html>

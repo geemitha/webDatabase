@@ -1,0 +1,198 @@
+/* styles.css */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+}
+
+.logo {
+    position: absolute;
+    top: -10px;
+    left: 5px;
+    width: 150px;
+    height: 150px;
+    padding: 0;
+}
+
+.header {
+    background-color: #5BC2E7;
+    font-size: 20px;
+    color: #1E1248;
+    padding: 20px;
+    text-align: center;
+    font-weight: bold;
+    font-family: 'Program OT Bold';
+}
+
+.search-section {
+    background-color: #f3f3f3;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 90%;
+    margin: 20px auto;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.search-section .action-button {
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #0077c8;
+    color: white;
+    width: 40px;
+    text-align: center;
+}
+
+.search-section .action-button:hover {
+    opacity: 0.9;
+}
+
+.search-section .plus-button {
+    background-color: #28a745; /* Green */
+}
+
+.search-section .minus-button {
+    background-color: #e60000; /* Red */
+}
+
+.search-section .dropdown {
+    width: 120px; /* Smaller width for the dropdown */
+    padding: 8px; /* Adjust padding to balance the smaller size */
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+} 
+.search-section .search-input {
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    flex: 1;
+    min-width: 150px;
+}
+
+.search-section .search-button {
+    padding: 10px 15px;
+    font-size: 14px;
+    background-color: #5BC2E7;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.search-section .search-button:hover {
+    opacity: 0.9;
+}
+
+.form-container {
+    padding: 20px;
+    background-color: white;
+    border: 1px solid #ddd;
+    margin: 20px auto;
+    width: 90%;
+    border-radius: 5px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.add-save-form {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.add-save-form input {
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    flex: 1;
+    min-width: 150px;
+}
+
+.add-save-form button {
+    padding: 10px 15px;
+    font-size: 14px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.add-button {
+    background-color: #0077c8;
+    color: white;
+}
+
+.save-button {
+    background-color: #28a745;
+    color: white;
+}
+
+.add-save-form button:hover {
+    opacity: 0.9;
+}
+
+.table-container {
+    margin: 20px auto;
+    width: 90%;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.add-save-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.add-save-table th, .add-save-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+.add-save-table th {
+    background-color: #f3f3f3;
+    font-weight: bold;
+}
+
+.add-save-table tbody tr:nth-child(odd) {
+    background-color: #f9f9f9;
+}
+
+.add-save-table tbody tr:nth-child(even) {
+    background-color: #ffffff;
+}
+
+button {
+    padding: 6px 12px;
+    font-size: 12px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    margin: 2px;
+}
+
+.edit-button {
+    background-color: #ffc107;
+    color: black;
+}
+
+.delete-button {
+    background-color: #e60000;
+    color: white;
+}
+
+button:hover {
+    opacity: 0.9;
+}

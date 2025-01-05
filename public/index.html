@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Read & Publish Agreements</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <img src="Img/Victoria_University_Melb_Aus_Logo_Portrait_R.png" alt="Logo" class="logo">
+            <h1>Read & Publish Agreements</h1>
+        </div>
+    </header>
+    <main>
+        <!-- Search Section -->
+        <div class="search-section">
+            <button class="action-button plus-button">+</button>
+            <button class="action-button minus-button">-</button>
+            <select class="dropdown">
+                <option value="">Pick an Option</option>
+            <option value="title">Title</option>
+            <option value="issn">ISSN</option>
+            <option value="ranking">Ranking</option>
+            <option value="category1">Discipline</option>
+            <option value="JournalHome">Journal Homepage</option>
+            </select>
+            <input type="text" placeholder="Please Enter a Keyword..." class="search-input">
+            <button class="search-button">Search</button>
+        </div>
+
+        <!-- Add & Save Form -->
+        <div class="form-container">
+            <form id="data-form">
+                <input type="text" name="title" placeholder="Title" required>
+                <input type="text" name="issn" placeholder="ISSN" required>
+                <input type="text" name="publisher" placeholder="Publisher" required>
+                <input type="text" name="ranking" placeholder="Scimago Ranking" required>
+                <input type="text" name="discipline" placeholder="Discipline" required>
+                <input type="text" name="journalHome" placeholder="Journal Homepage" required>
+                <button type="submit" class="save-button">Save & Create</button>
+            </form>
+        </div>
+
+                <!-- Bulk Upload Form -->
+        <div class="bulk-upload">
+            <form id="bulk-upload-form">
+                <label for="csvFile" class="csv-label">Import items using the given CSV template:</label>
+                <input id="csvFile" name="csvFile" type="file" accept=".csv" required />
+                <button type="submit" class="upload-button">Upload</button>
+            </form>
+        </div>
+
+
+        <!-- Table -->
+        <div class="table-container">
+            <table class="add-save-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Title</th>
+                        <th>ISSN</th>
+                        <th>Publisher</th>
+                        <th>Scimago Ranking</th>
+                        <th>Discipline</th>
+                        <th>Journal Homepage</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="table-body">
+                    <!-- Dynamic rows -->
+                </tbody>
+            </table>
+        </div>
+    </main>
+    <script src="script.js"></script>
+</body>
+<footer class="footer">
+    <div class="footer-content">
+        <p>Victoria University of Melbourne, Australia</p>
+    </div>
+</html>

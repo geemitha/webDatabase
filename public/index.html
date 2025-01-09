@@ -23,7 +23,7 @@
             <option value="title">Title</option>
             <option value="issn">ISSN</option>
             <option value="ranking">Ranking</option>
-            <option value="category1">Discipline</option>
+            <option value="discipline">Discipline</option>
             <option value="JournalHome">Journal Homepage</option>
             </select>
             <input type="text" placeholder="Please Enter a Keyword..." class="search-input">
@@ -45,11 +45,12 @@
 
                 <!-- Bulk Upload Form -->
         <div class="bulk-upload">
-            <form id="bulk-upload-form">
+            <form id="bulk-upload-form" enctype="multipart/form-data">
                 <label for="csvFile" class="csv-label">Import items using the given CSV template:</label>
-                <input id="csvFile" name="csvFile" type="file" accept=".csv" required />
+                <input type="file" id="csvFile" name="csvFile" accept=".csv" required />
                 <button type="submit" class="upload-button">Upload</button>
             </form>
+            <div id="message-container"></div>
         </div>
 
 
@@ -78,6 +79,8 @@
 </body>
 <footer class="footer">
     <div class="footer-content">
-        <p>Victoria University of Melbourne, Australia</p>
+        <p>Copyright © 2025. Victoria University, CRICOS No. 00124K (Melbourne), 
+            02475D (Sydney and Brisbane). RTO 3113. ABN: 83 776 954 731. TEQSA 
+            No. PRV12152, Provider Category: Australian University</p>
     </div>
 </html>

@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const form = document.getElementById("data-form");
     const bulkUploadForm = document.getElementById("bulk-upload-form");
     const tableBody = document.getElementById("table-body");
+    const messageContainer = document.getElementById("message-container");
 
     let rowIndex = 1;
 
@@ -10,6 +11,9 @@ document.addEventListener("DOMContentLoaded", () => {
         .then((res) => res.json())
         .then((data) => {
             data.forEach((row) => addRowToTable(row));
+        })
+        .catch((error) => {
+            console.error("Error fetching data:", error);
         });
 
     // Handle form submission
@@ -36,8 +40,9 @@ document.addEventListener("DOMContentLoaded", () => {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(entry),
-        }).then(() => {
-            addRowToTable(entry);
+        }).then((res) => res.json())
+          .then((data) => {
+            addRowToTable(data.data);
             form.reset();
         });
     });
@@ -49,42 +54,37 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (!csvFile) return alert("Please select a CSV file!");
 
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            const csvData = e.target.result;
-            const rows = csvData.split("\n").slice(1); // Skip header row
-            const entries = rows
-                .map((row) => {
-                    const [title, issn, publisher, ranking, discipline, journalHome] = row.split(",");
-                    const formattedISSN = formatISSN(issn ? issn.trim() : "");
-                    if (!title || !isValidISSN(issn) || !publisher || !ranking || !discipline || !journalHome) return null;
-                    return { title, issn: formattedISSN, publisher, ranking, discipline, journalHome };
-                })
-                .filter(Boolean);
+        const formData = new FormData();
+        formData.append("csvFile", csvFile);
 
-            fetch("/bulk-data", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(entries),
-            }).then(() => {
-                entries.forEach((entry) => addRowToTable(entry));
+        fetch("/bulk-data", {
+            method: "POST",
+            body: formData,
+        }).then((res) => res.json())
+          .then((data) => {
+            if (data.success) {
+                data.data.forEach((entry) => addRowToTable(entry));
+                showMessage("Bulk upload successful!", "success");
                 bulkUploadForm.reset();
-            });
-        };
-
-        reader.readAsText(csvFile);
+            } else {
+                showMessage(data.message || "Bulk upload failed!", "error");
+            }
+        }).catch((error) => {
+            showMessage("An error occurred during the bulk upload.", "error");
+        });
     });
 
     function addRowToTable(row) {
         const tr = document.createElement("tr");
+        tr.dataset.id = row.id; // Store the id in a data attribute
         tr.innerHTML = `
             <td>${rowIndex++}</td>
-            <td>${row.title}</td>
-            <td>${row.issn}</td>
-            <td>${row.publisher}</td>
-            <td>${row.ranking}</td>
-            <td>${row.discipline}</td>
-            <td><a href="${row.journalHome}" target="_blank">${row.journalHome}</a></td>
+            <td data-key="title">${row.title}</td>
+            <td data-key="issn">${row.issn}</td>
+            <td data-key="publisher">${row.publisher}</td>
+            <td data-key="ranking">${row.ranking}</td>
+            <td data-key="discipline">${row.discipline}</td>
+            <td data-key="journalHome"><a href="${row.journalHome}" target="_blank">${row.journalHome}</a></td>
             <td>
                 <button class="edit-button">Edit</button>
                 <button class="save-button" disabled>Save</button>
@@ -103,12 +103,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function toggleEditRow(row) {
-        const cells = row.querySelectorAll("td:not(:last-child)");
-        cells.forEach((cell, index) => {
-            if (index > 0 && index < cells.length - 1) {
-                const value = cell.textContent;
-                cell.innerHTML = `<input type="text" value="${value}" />`;
-            }
+        const cells = row.querySelectorAll("td[data-key]");
+        cells.forEach((cell) => {
+            const value = cell.textContent;
+            cell.innerHTML = `<input type="text" value="${value}" />`;
         });
         row.querySelector(".edit-button").disabled = true;
         row.querySelector(".save-button").disabled = false;
@@ -116,15 +114,46 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function toggleSaveRow(row) {
         const inputs = row.querySelectorAll("input");
+        const updatedData = {};
         inputs.forEach((input, index) => {
-            row.cells[index + 1].textContent = input.value;
+            const key = row.cells[index + 1].getAttribute('data-key');
+            updatedData[key] = input.value;
+            row.cells[index + 1].innerHTML = key === "journalHome" ? `<a href="${input.value}" target="_blank">${input.value}</a>` : input.value;
         });
-        row.querySelector(".edit-button").disabled = false;
-        row.querySelector(".save-button").disabled = true;
+
+        const id = row.dataset.id; // Retrieve the id from the data attribute
+
+        fetch(`/data/${id}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(updatedData),
+        }).then(() => {
+            row.querySelector(".edit-button").disabled = false;
+            row.querySelector(".save-button").disabled = true;
+        }).catch((error) => {
+            console.error("Error saving data:", error);
+        });
     }
 
     function deleteRow(row) {
-        row.remove();
+        const id = row.dataset.id; // Retrieve the id from the data attribute
+
+        fetch(`/data/${id}`, {
+            method: "DELETE",
+        }).then(() => {
+            row.remove();
+        }).catch((error) => {
+            console.error("Error deleting data:", error);
+        });
+    }
+
+    function showMessage(message, type) {
+        messageContainer.textContent = message;
+        messageContainer.className = type;
+        setTimeout(() => {
+            messageContainer.textContent = "";
+            messageContainer.className = "";
+        }, 5000);
     }
 
     // Helper function to format ISSN numbers

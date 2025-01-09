@@ -29,11 +29,11 @@ body {
 /* footer Styling */
 .footer {
     background-color: #161616;
-    font-size: 20px;
+    font-size: 14px;
     color: #ffffff;
     padding: 20px;
     text-align: center;
-    font-weight: bold;
+    /* font-weight: bold; */
     font-family: sans-serif;
     position: fixed;
     bottom: 0;
@@ -165,6 +165,25 @@ body {
 }
 .add-save-form button:hover {
     opacity: 0.9;
+}
+
+#message-container {
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    display: none;
+}
+
+#message-container.success {
+    background-color: #d4edda;
+    color: #155724;
+    display: block;
+}
+
+#message-container.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    display: block;
 }
 
 /* Table Styling */

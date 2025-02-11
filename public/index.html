@@ -18,15 +18,20 @@
         <div class="search-section">
             <button class="action-button plus-button">+</button>
             <button class="action-button minus-button">-</button>
-            <select class="dropdown">
-                <option value="">Pick an Option</option>
-            <option value="title">Title</option>
-            <option value="issn">ISSN</option>
-            <option value="ranking">Ranking</option>
-            <option value="discipline">Discipline</option>
-            <option value="JournalHome">Journal Homepage</option>
-            </select>
-            <input type="text" placeholder="Please Enter a Keyword..." class="search-input">
+            <div id="filters-container">
+                <div class="filter">
+                    <select class="dropdown">
+                        <option value="">Pick an Option</option>
+                        <option value="title">Title</option>
+                        <option value="issn">ISSN</option>
+                        <option value="publisher">Publisher</option>
+                        <option value="ranking">Ranking</option>
+                        <option value="discipline">Discipline</option>
+                        <option value="journalHome">Journal Homepage</option>
+                    </select>
+                    <input type="text" placeholder="Please Enter a Keyword..." class="search-input">
+                </div>
+            </div>
             <button class="search-button">Search</button>
         </div>
 

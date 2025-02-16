@@ -27,6 +27,11 @@ const Journal = sequelize.define('Journal', {
         type: DataTypes.STRING,
         allowNull: false,
     },
+    isArchive: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        defaultValue: 'false',
+    }
 }, {
     tableName: 'journals',
 });

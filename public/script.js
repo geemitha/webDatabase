@@ -3,6 +3,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const bulkUploadForm = document.getElementById("bulk-upload-form");
     const tableBody = document.getElementById("table-body");
     const messageContainer = document.getElementById("message-container");
+    const filtersContainer = document.getElementById("filters-container");
+    const plusButton = document.querySelector(".plus-button");
+    const minusButton = document.querySelector(".minus-button");
+    const searchButton = document.querySelector(".search-button");
 
     let rowIndex = 1;
 
@@ -175,5 +179,63 @@ document.addEventListener("DOMContentLoaded", () => {
     function isValidISSN(issn) {
         const cleaned = issn.replace(/[^0-9X]/gi, "");
         return cleaned.length === 8;
+    }
+
+    // Add event listeners for plus and minus buttons
+    plusButton.addEventListener("click", addFilter);
+    minusButton.addEventListener("click", removeFilter);
+    searchButton.addEventListener("click", applyFilters);
+
+    function addFilter() {
+        const filterCount = filtersContainer.querySelectorAll(".filter").length;
+        if (filterCount < 6) {
+            const filterDiv = document.createElement("div");
+            filterDiv.className = "filter";
+            filterDiv.innerHTML = `
+                <select class="dropdown">
+                    <option value="">Pick an Option</option>
+                    <option value="title">Title</option>
+                    <option value="issn">ISSN</option>
+                    <option value="publisher">Publisher</option>
+                    <option value="ranking">Ranking</option>
+                    <option value="discipline">Discipline</option>
+                    <option value="journalHome">Journal Homepage</option>
+                </select>
+                <input type="text" placeholder="Please Enter a Keyword..." class="search-input">
+            `;
+            filtersContainer.appendChild(filterDiv);
+        }
+    }
+
+    function removeFilter() {
+        const filters = filtersContainer.querySelectorAll(".filter");
+        if (filters.length > 1) {
+            filters[filters.length - 1].remove();
+        }
+    }
+
+    function applyFilters() {
+        const filters = filtersContainer.querySelectorAll(".filter");
+        const filterCriteria = [];
+
+        filters.forEach(filter => {
+            const dropdown = filter.querySelector(".dropdown").value;
+            const searchInput = filter.querySelector(".search-input").value.trim().toLowerCase();
+            if (dropdown && searchInput) {
+                filterCriteria.push({ key: dropdown, value: searchInput });
+            }
+        });
+
+        const rows = tableBody.querySelectorAll("tr");
+        rows.forEach(row => {
+            let match = true;
+            filterCriteria.forEach(criteria => {
+                const cell = row.querySelector(`td[data-key="${criteria.key}"]`);
+                if (cell && !cell.textContent.toLowerCase().includes(criteria.value)) {
+                    match = false;
+                }
+            });
+            row.style.display = match ? "" : "none";
+        });
     }
 });

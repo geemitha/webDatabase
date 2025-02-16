@@ -61,16 +61,19 @@ document.addEventListener("DOMContentLoaded", () => {
             method: "POST",
             body: formData,
         }).then((res) => res.json())
-          .then((data) => {
-            if (data.success) {
-                data.data.forEach((entry) => addRowToTable(entry));
+          .then((res) => {
+            console.log(res);
+            if (res.success) {
                 showMessage("Bulk upload successful!", "success");
                 bulkUploadForm.reset();
+                //refresh the page with 3 second delay
+                setTimeout(() => window.location.reload(), 3000); 
+                
             } else {
-                showMessage(data.message || "Bulk upload failed!", "error");
+                showMessage(res.message || "Bulk upload failed!", "error");
             }
         }).catch((error) => {
-            showMessage("An error occurred during the bulk upload.", "error");
+            showMessage(error, "error");
         });
     });
 

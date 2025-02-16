@@ -3,19 +3,13 @@ const path = require("path");
 const multer = require("multer");
 const csv = require("csv-parser");
 const fs = require("fs");
-const sequelize = require("../config/sequelize");
 const Journal = require("../config/journal");
 
 const app = express();
 const router = express.Router();
 
 // Configure multer for file uploads
-const upload = multer({ dest: "uploads/" });
-
-// Sync database
-sequelize.sync().then(() => {
-    console.log('Database synced');
-});
+//const upload = multer({ dest: "uploads/" });
 
 // Endpoint to retrieve data
 router.get("/data", async (req, res) => {
@@ -56,49 +50,83 @@ router.delete("/data/:id", async (req, res) => {
 });
 
 // Endpoint for bulk upload
-router.post("/bulk-data", upload.single("csvFile"), (req, res) => {
+// Ensure "uploads" directory exists
+const uploadDir = path.join(__dirname, "../uploads");
+if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir, { recursive: true });
+}
+
+// Configure Multer to store files in "uploads" directory
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, uploadDir);
+    },
+    filename: (req, file, cb) => {
+        cb(null, `${Date.now()}-${file.originalname}`);
+    }
+});
+
+const upload = multer({ storage });
+
+// Endpoint for bulk upload
+router.post("/bulk-data", upload.single("csvFile"), async (req, res) => {
+    if (!req.file) {
+        return res.status(400).json({ success: false, message: "No file uploaded" });
+    }
+
     const filePath = req.file.path;
     const entries = [];
     const requiredHeaders = ["title", "issn", "publisher", "ranking", "discipline", "journalHome"];
     let headersValid = true;
 
-    fs.createReadStream(filePath)
-        .pipe(csv())
-        .on("headers", (headers) => {
-            headersValid = requiredHeaders.every(header => headers.includes(header));
-            if (!headersValid) {
-                fs.unlinkSync(filePath); // Remove the uploaded file
-                return res.status(400).json({ success: false, message: "Invalid CSV template" });
-            }
-        })
-        .on("data", (row) => {
-            if (headersValid) {
-                const { title, issn, publisher, ranking, discipline, journalHome } = row;
-                if (title && issn && publisher && ranking && discipline && journalHome) {
-                    entries.push({ title, issn, publisher, ranking, discipline, journalHome });
-                }
-            }
-        })
-        .on("end", async () => {
-            if (headersValid) {
-                try {
-                    await Journal.bulkCreate(entries, { ignoreDuplicates: true });
-                    fs.unlinkSync(filePath); // Remove the uploaded file
-                    res.json({ success: true, message: "Bulk upload successful", data: entries });
-                } catch (error) {
-                    fs.unlinkSync(filePath); // Remove the uploaded file
-                    if (error.name === 'SequelizeUniqueConstraintError') {
-                        res.status(400).json({ success: false, message: "Duplicate ISSN found in the CSV file." });
-                    } else {
-                        res.status(500).json({ success: false, message: error.message });
+    try {
+        await new Promise((resolve, reject) => {
+            fs.createReadStream(filePath)
+                .pipe(csv())
+                .on("headers", (headers) => {
+                    headersValid = requiredHeaders.every(header => headers.includes(header));
+                    if (!headersValid) {
+                        reject(new Error("Invalid CSV template"));
                     }
-                }
-            }
-        })
-        .on("error", (error) => {
-            fs.unlinkSync(filePath); // Remove the uploaded file
-            res.status(500).json({ success: false, message: "Error processing CSV file", error });
+                })
+                .on("data", (row) => {
+                    if (headersValid && row) {  // <-- Ensure row is not undefined
+                        const cleanRow = {};
+
+                        requiredHeaders.forEach((header) => {
+                            cleanRow[header] = row?.[header] ?? ""; // Safe optional chaining
+                        });
+
+                        entries.push(cleanRow);
+                    }
+                })
+                .on("end", resolve)
+                .on("error", reject);
         });
+
+        if (!headersValid) {
+            throw new Error("Invalid CSV template");
+        }
+
+        // Insert data in batches of 10
+        const batchSize = 10;
+        for (let i = 0; i < entries.length; i += batchSize) {
+            const batch = entries.slice(i, i + batchSize);
+            await Journal.bulkCreate(batch, { ignoreDuplicates: true });
+        }
+
+        res.json({ success: true, message: "Bulk upload successful", totalRecords: entries.length });
+
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    } finally {
+        // Always remove the uploaded file after processing
+        fs.unlink(filePath, (err) => {
+            if (err) console.error("Error deleting file:", err);
+        });
+    }
 });
+
+
 
 module.exports = router;

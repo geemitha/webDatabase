@@ -9,7 +9,7 @@ const Journal = sequelize.define('Journal', {
     issn: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true, // Add unique constraint
+        unique: false, // Add unique constraint
     },
     publisher: {
         type: DataTypes.STRING,

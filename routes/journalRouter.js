@@ -97,6 +97,7 @@ router.post("/bulk-data", upload.single("csvFile"), async (req, res) => {
                             cleanRow[header] = row?.[header] ?? ""; // Safe optional chaining
                         });
 
+                        cleanRow.isArchive = 'false'; // Set isArchive to false for new data
                         entries.push(cleanRow);
                     }
                 })
@@ -107,6 +108,9 @@ router.post("/bulk-data", upload.single("csvFile"), async (req, res) => {
         if (!headersValid) {
             throw new Error("Invalid CSV template");
         }
+
+        // Set isArchive to true for existing records
+        await Journal.update({ isArchive: 'true' }, { where: { isArchive: 'false' } });
 
         // Insert data in batches of 10
         const batchSize = 10;

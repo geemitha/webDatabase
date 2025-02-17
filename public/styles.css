@@ -4,10 +4,10 @@ body {
     margin: 0;
     padding: 0;
     background-color: hsl(0, 0%, 100%);
-    background-size: cover; /* Make background image cover the entire page */
-    background-attachment: fixed; /* Make background image fixed */
-    background-position: center; /* Center the background image */
-    overflow-y: scroll; /* Enable vertical scrolling */
+    background-size: cover; 
+    background-attachment: fixed; 
+    background-position: center; 
+    overflow-y: scroll;
 }
 
 .logo {
@@ -59,7 +59,7 @@ body {
 
 /* footer Styling */
 .footer {
-    background-color: #161616;
+    background-color: #000000;
     font-size: 14px;
     color: #ffffff;
     padding: 20px;
@@ -98,17 +98,23 @@ body {
     border-radius: 4px;
     cursor: pointer;
     color: white;
-    width: 40px;
+    width: 45px;
     text-align: center;
     background-color: #0c0c0c;
 }
 
 .search-section .plus-button {
-    background-color: #0d0d0e;
+    background-color:#000000;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
 }
 
 .search-section .minus-button {
-    background-color: #0c0c0c;
+    background-color: #000000;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
 }
 
 .search-section .dropdown {
@@ -190,18 +196,18 @@ body {
 }
 
 .savecreate-button {
-    background-color: #0f0f0f;
-    color: white;
+    background-color: #5BC2E7;
+    color: rgb(17, 17, 17);
 }
 
 .save-button {
-    background-color: #5BC2E7;
-    color: white;
+    background-color:#5BC2E7;
+    color: rgb(14, 14, 14);
 }
 
 .upload-button {
-    background-color: #030303;
-    color: white;
+    background-color:#5BC2E7;
+    color: rgb(10, 10, 10);
 }
 
 .csv-label {
@@ -278,13 +284,13 @@ button {
 }
 
 .edit-button {
-    background-color: #ffc107;
+    background-color: #B49AD2;
     color: black;
 }
 
 .delete-button {
-    background-color: #e60000;
-    color: white;
+    background-color: #ED6B5E;
+    color: rgb(24, 24, 24);
 }
 
 button:hover {

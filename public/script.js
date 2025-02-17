@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
     fetch("/data")
         .then((res) => res.json())
         .then((data) => {
-            data.forEach((row) => addRowToTable(row));
+            data.filter(row => row.isArchive === 'false').forEach((row) => addRowToTable(row));
         })
         .catch((error) => {
             console.error("Error fetching data:", error);
@@ -218,13 +218,24 @@ document.addEventListener("DOMContentLoaded", () => {
         const filters = filtersContainer.querySelectorAll(".filter");
         const filterCriteria = [];
 
+        let reloadPage = false;
+
         filters.forEach(filter => {
             const dropdown = filter.querySelector(".dropdown").value;
             const searchInput = filter.querySelector(".search-input").value.trim().toLowerCase();
-            if (dropdown && searchInput) {
+            if (dropdown === "") {
+                reloadPage = true;
+            } else if (dropdown && searchInput) {
                 filterCriteria.push({ key: dropdown, value: searchInput });
             }
         });
+
+        if (reloadPage) {
+            setTimeout(() => {
+                window.location.reload();
+            }, 2000);
+            return;
+        }
 
         const rows = tableBody.querySelectorAll("tr");
         rows.forEach(row => {
